@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod'
 import {z} from 'zod'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../Redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -23,15 +24,23 @@ const Singup = () => {
     const {register,handleSubmit,formState : {errors} }=useForm({
         resolver:zodResolver(validationSchema)
     });
+    const {signedIn } =useSelector((state)=>state.auth);
     const dispatch =useDispatch();
+    const navigate=useNavigate();
+    
 
     const onSubmit= async (Data)=>{
         dispatch(signup(Data));
     }
 
+    useEffect(()=>{
+        if(signedIn){
+            navigate('/login');
+        }
+    },[signedIn]);
     
   return (
-    <div className='flex w-full h-full justify-center items-center '>
+    <div className='flex w-[100vw] h-[100vh] justify-center items-center'>
       <div className='grid grid-cols-2 gap-5 bg-white w-[85%]'>
         <div className='flex justify-center items-center'>
             <img src="https://imgs.search.brave.com/HGvaHnwhNGF9xbDdlj4jq8sxs3-cXcCx0hxD5IMNpfw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9zaWduLWxvZ2lu/LXdlYnNpdGUtcGFn/ZV80MDY4MTEtOTk5/NDIuanBnP3NpemU9/NjI2JmV4dD1qcGc" alt="" />
