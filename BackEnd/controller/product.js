@@ -10,9 +10,10 @@ const getAllProducts=async(req,res,next)=>{
 }
 
 const addProduct=async(req,res,next)=>{
+    const {name,price,category,description}=req.body;
+    const productURL=req.file.path;
     try {
-        const {name,price,category,description}=req.body;
-        const productURL=req.file.path;
+        
         const product = new Product({
             name,
             price,
@@ -27,8 +28,44 @@ const addProduct=async(req,res,next)=>{
     }
 }
 
+const updateProduct=async (req,res,next)=>{
+    const {id} =req.params;
+    try {
+        const isExisting=await Product.findById(id);
+        if(!isExisting){
+            const error=new Error("product Not Found");
+            error.statusCode=404;
+            throw(error)
+        }
+        const product = await Product.findByIdAndUpdate(id,req.body ,{new :true});
+        res.status(201).send({msg:"product updated ",data:product});
+    } catch (error) {
+        next(error);
+    }
+}
+
+const updateProductWithImage =async (req,res,next)=>{
+    const { id }=req.params;
+    const productURL=req.file.path;
+    try {
+        console.log("here mf");
+        const isExisting=await Product.findById(id);
+        if(!isExisting){
+            const error=new Error("product Not Found");
+            error.statusCode=404;
+            throw(error)
+        }
+        const product = await Product.findByIdAndUpdate(id,{...req.body,productURL : productURL},{new :true});
+        return res.status(201).send({msg:"product Update With Image",data:product});
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports={
     getAllProducts,
-    addProduct
+    addProduct,
+    updateProduct,
+    updateProductWithImage
 }

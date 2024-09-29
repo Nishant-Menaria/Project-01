@@ -12,6 +12,10 @@ import MyOrder from '../components/MyOrder'
 import Profile from '../components/Profile'
 import OpenRoute from '../components/OpenRoute'
 import GoogleAuth from '../components/GoogleAuth'
+import MyOrders from '../components/MyOrder'
+import AdminUser from '../components/AdminUser'
+import AdminProduct from '../components/AdminProduct'
+import AdminOrders from '../components/AdminOrders'
 
 const Router = createBrowserRouter([
     {
@@ -45,11 +49,24 @@ const Router = createBrowserRouter([
         ]
     },
     {
-        element:<Protected allowedRole={["admin"]}/>,
+        element:<Protected allowedRole={["Admin"]}/>,
         children:[
             {
                 path:'/dashboard',
                 element:<Dashboard/>
+            },
+            {
+                path:'/adminUser',
+                element:<AdminUser/>
+            },{
+                path:"/adminProduct",
+                element:<AdminProduct/>
+            },{
+                path:"adminOrder",
+                element:<AdminOrders/>
+            },{
+                path:"profile",
+                element:<Profile/>
             }
         ]
     },
@@ -61,7 +78,7 @@ const Router = createBrowserRouter([
                 element:<Order/>
             },{
                 path :'/myorder',
-                element :<MyOrder/>
+                element :<MyOrders/>
             }
         ]
     },

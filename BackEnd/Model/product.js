@@ -18,8 +18,7 @@ const productSchema=mongoose.Schema({
         required:true
     },
     productURL:{
-        type:String,
-        required:true
+        type:String
     }
 });
 

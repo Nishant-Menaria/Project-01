@@ -1,10 +1,24 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { IoIosLogOut } from "react-icons/io";
+import { logOut } from '../Redux/slices/authSlice';
 
 const Navbar = () => {
     const { isLogedin, role } = useSelector((state) => state.auth);
     const dispatch = useDispatch()
+
+    const handelLogOut=()=>{
+        dispatch(logOut());
+    }
+
+    const navigate=useNavigate();
+
+    useEffect(()=>{
+        if(!isLogedin){
+            navigate('/');
+        }
+    },[isLogedin]);
 
 
 
@@ -20,13 +34,14 @@ const Navbar = () => {
                 isLogedin
                     ?
                     (
-                        role === "User"
+                        role =="User"
                             ?
                             (
                                 <div className='flex gap-5 text-white'>
                                     <Link to="/cart">Cart</Link>
                                     <Link to="/myorder">My-Orders</Link>
                                     <Link to="/profile">Profile</Link>
+                                    <button onClick={handelLogOut}><IoIosLogOut /></button>
                                 </div>
                             )
                             :
@@ -37,6 +52,7 @@ const Navbar = () => {
                                     <Link to="/adminProduct">Products</Link>
                                     <Link to="/adminOrder">Orders</Link>
                                     <Link to="/profile">Profile</Link>
+                                    <button onClick={handelLogOut}><IoIosLogOut /></button>
                                 </div>
                             )
                     )

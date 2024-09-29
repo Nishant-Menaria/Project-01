@@ -1,67 +1,125 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-export const getProducts = createAsyncThunk("auth/product",async({rejectWithValue})=>{
+export const getAllProducts = createAsyncThunk("product/getAllProducts",async(_ ,{rejectWithValue})=>{
     try{
-        const responce=await axios.get("http://localhost:3000/auth/signup");
+        const responce=await axios.get("http://localhost:3000/api/product");
         return responce.data.data;
     }catch(error){
-        rejectWithValue(error);
+        return rejectWithValue(error);
     }
 })
 
-export const addProduct = createAsyncThunk("auth/product",async(data,{rejectWithValue})=>{
+export const addProduct = createAsyncThunk("product/addProduct",async(data,{rejectWithValue})=>{
     try{
-        const responce=await axios.post("http://localhost:3000/auth/product",data);
-        return responce.data.data;
+        const responce=await axios.post("http://localhost:3000/api/product",data);
+        return responce;
     }catch(error){
-        rejectWithValue(error);
+        return rejectWithValue({
+            message: error.message,
+            status: error.response.status,
+            data: error.response.data
+          });
+    }
+})
+
+export const updateProduct=createAsyncThunk("product/updateProduct",async(data,{rejectWithValue})=>{
+    try {
+        const responce =await axios.put(`http://localhost:3000/api/product/${data._id}`,data);
+        return responce;
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue({
+            message: err.message,
+            code: err.code,
+            response: err.response?.data, // or extract whatever you need
+          });
+    }
+});
+
+export const updateProductWithImage =createAsyncThunk("product/updateProductWithImage",async(data,{rejectWithValue})=>{
+    try {
+        const responce =await axios.put(`http://localhost:3000/api/productWithImage/${data.id}`,data.data);
+        return responce;
+    } catch (error) {
+        return rejectWithValue({
+            message: err.message,
+            code: err.code,
+            response: err.response?.data, // or extract whatever you need
+          });
     }
 })
 
 
-const initialState={
-    isLoading : false, user : null,
+const initialState = {
+    isLoading : false,
     error : null,
-    products :[]
+    products : [],
+    isProductAdded : false
 }
 
-const productSlice=createSlice({
+const productSlice = createSlice({
     name : "product",
     initialState,
-    reducers:{
+    reducers : {
         
     },
-    extraReducers:(builder)=>{
+    extraReducers :(builder)=>{
         builder
-        .addCase(getProduct.pending,(state,action)=>{
-            state.isLoading=true;
-            state.products=[]
+        .addCase(addProduct.pending , (state)=>{
+            state.isProductAdded = false;
+            state.isLoading = true
         })
-        .addCase(getProduct.fulfilled,(state,action)=>{
-            state.isLoading=false;
-            state.products=action.payload;
+        .addCase(addProduct.fulfilled , (state,action)=>{
+            state.isProductAdded = true;
+            state.isLoading = false;
+            state.error = null
         })
-        .addCase(getProduct.rejected,(state,action)=>{
-            state.isLoading=false;
-            state.error=action.payload
+        .addCase(addProduct.rejected , (state , action)=>{
+            state.isLoading = false,
+            state.error = action.payload?.response?.data
         })
-        .addCase(addProduct.pending,(state,action)=>{
-            state.isLoading=true;
-            state.products=[]
+        .addCase(updateProduct.pending , (state)=>{
+            state.isProductAdded = false;
+            state.isLoading = true
         })
-        .addCase(addProduct.fulfilled,(state,action)=>{
-            state.isLoading=false;
-            state.products=action.payload;
+        .addCase(updateProduct.fulfilled , (state,action)=>{
+            state.isProductAdded = true;
+            state.isLoading = false;
+            state.error = null
         })
-        .addCase(addProduct.rejected,(state,action)=>{
-            state.isLoading=false;
-            state.error=action.payload
+        .addCase(updateProduct.rejected , (state , action)=>{
+            state.isLoading = false,
+            state.error = action.payload?.response?.data
+        })
+        .addCase(updateProductWithImage.pending , (state)=>{
+            state.isProductAdded = false;
+            state.isLoading = true
+        })
+        .addCase(updateProductWithImage.fulfilled , (state,action)=>{
+            state.isProductAdded = true;
+            state.isLoading = false;
+            state.error = null
+        })
+        .addCase(updateProductWithImage.rejected , (state , action)=>{
+            state.isLoading = false,
+            state.error = action.payload?.response?.data
+        })
+        .addCase(getAllProducts.pending , (state)=>{
+            state.isLoading = true
+        })
+        .addCase(getAllProducts.fulfilled , (state,action)=>{
+            state.isLoading = false,
+            state.products=action.payload
+            state.error = null
+        })
+        .addCase(getAllProducts.rejected , (state , action)=>{
+            state.isLoading = false,
+            state.error = action.payload?.response?.data
         })
     }
-})
+});
 
-
-export const  {} =product.actions;
+export const  {} =productSlice.actions;
 
 export default productSlice.reducer;
