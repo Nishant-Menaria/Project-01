@@ -3,9 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { IoIosLogOut } from "react-icons/io";
 import { logOut } from '../Redux/slices/authSlice';
+import { FaCartPlus  ,FaUser ,FaUsers ,FaProductHunt ,FaJediOrder } from "react-icons/fa";
+import { SiGnuprivacyguard } from "react-icons/si";
+import { MdDashboard } from "react-icons/md";
+import { IoLogIn } from "react-icons/io5";
+import Badge from '@mui/material/Badge';
 
 const Navbar = () => {
     const { isLogedin, role } = useSelector((state) => state.auth);
+    const { cartItem }=useSelector((state)=>state.cart);
     const dispatch = useDispatch()
 
     const handelLogOut=()=>{
@@ -38,20 +44,49 @@ const Navbar = () => {
                             ?
                             (
                                 <div className='flex gap-5 text-white'>
-                                    <Link to="/cart">Cart</Link>
+                                    <Badge badgeContent={cartItem.length} color="primary">
+                                    <Link to="/cart">
+                                        <FaCartPlus />
+                                        Cart
+                                    </Link>
+                                    </Badge>
                                     <Link to="/myorder">My-Orders</Link>
-                                    <Link to="/profile">Profile</Link>
+                                    <Link to="/profile">
+                                        <FaUser />
+                                        Profile
+                                    </Link>
                                     <button onClick={handelLogOut}><IoIosLogOut /></button>
                                 </div>
                             )
                             :
                             (
                                 <div className='flex gap-5 text-white'>
-                                    <Link to="/dashboard">Dashboard</Link>
-                                    <Link to="/adminUser">Users</Link>
-                                    <Link to="/adminProduct">Products</Link>
-                                    <Link to="/adminOrder">Orders</Link>
-                                    <Link to="/profile">Profile</Link>
+                                    <Link to="/dashboard">
+                                        <MdDashboard />
+                                        Dashboard
+                                    </Link>
+                                    <Link to="/adminUser">
+                                        <FaUsers />
+                                        Users
+                                    </Link>
+                                    <Badge badgeContent={cartItem.length} color="primary">
+                                    <Link to="/cart">
+                                        <FaCartPlus />
+                                        Cart
+                                    </Link>
+                                    </Badge>
+                                    <Link to="/adminProduct">
+                                        <FaProductHunt />
+                                        Products
+                                    </Link>
+                                    <Link to="/adminOrder">
+                                        <FaJediOrder />
+                                        Orders
+                                    </Link>
+                                    <Link to="/profile">
+                                        <FaUser />
+                                        Profile
+                                    </Link>
                                     <button onClick={handelLogOut}><IoIosLogOut /></button>
                                 </div>
                             )
@@ -62,9 +97,20 @@ const Navbar = () => {
                             {/* <Link to="/cart">Dashboard</Link>
                 <Link to="/cart">Users</Link>
                 <Link to="/cart">Product</Link> */}
-                            <Link to="/cart">Cart</Link>
-                            <Link to="/login">Login</Link>
-                            <Link to="/signup">Signup</Link>
+                            <Badge badgeContent={cartItem.length} color="primary">
+                                    <Link to="/cart">
+                                        <FaCartPlus />
+                                        Cart
+                                    </Link>
+                                    </Badge>
+                            <Link to="/login">
+                                <IoLogIn />
+                                Login
+                            </Link>
+                            <Link to="/signup">
+                                <SiGnuprivacyguard />
+                                Signup
+                            </Link>
                         </div>
                     )
             }

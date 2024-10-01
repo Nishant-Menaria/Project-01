@@ -47,6 +47,7 @@ const authSlice=createSlice({
         logOut :(state,action)=>{
             localStorage.removeItem("token");
             state.isLogedin=false;
+            state.user=null;
             state.role=null;
         },
         loginWithGoogle:(state,action)=>{

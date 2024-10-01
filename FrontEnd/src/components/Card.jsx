@@ -4,8 +4,8 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
-import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 import Model from './Model';
+import { FaCartArrowDown } from "react-icons/fa";
 
 export default function BasicCard({product,isUpdate}) {
   return (
@@ -19,7 +19,7 @@ export default function BasicCard({product,isUpdate}) {
           size="sm"
           sx={{ position: 'absolute', top: '0.875rem', right: '0.5rem' }}
         >
-          <BookmarkAdd />
+          <FaCartArrowDown />
         </IconButton>
       </div>
       <AspectRatio minHeight="120px" maxHeight="200px">
