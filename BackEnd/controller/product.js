@@ -48,7 +48,6 @@ const updateProductWithImage =async (req,res,next)=>{
     const { id }=req.params;
     const productURL=req.file.path;
     try {
-        console.log("here mf");
         const isExisting=await Product.findById(id);
         if(!isExisting){
             const error=new Error("product Not Found");

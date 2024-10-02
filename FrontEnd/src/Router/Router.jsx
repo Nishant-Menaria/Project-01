@@ -8,7 +8,6 @@ import Protected from '../components/Protected'
 import Cart from '../components/Cart'
 import Dashboard from "../components/Dashboard"
 import Order from '../components/Order'
-import MyOrder from '../components/MyOrder'
 import Profile from '../components/Profile'
 import OpenRoute from '../components/OpenRoute'
 import GoogleAuth from '../components/GoogleAuth'

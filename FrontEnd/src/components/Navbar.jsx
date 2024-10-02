@@ -26,8 +26,6 @@ const Navbar = () => {
         }
     },[isLogedin]);
 
-
-
     return (
         <div className='flex justify-between items-center bg-sky-950 p-2 py-4 w-full'>
             <div className='text-white text-2xl font-medium'>

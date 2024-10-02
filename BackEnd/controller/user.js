@@ -52,8 +52,18 @@ const Login=async(req,res,next)=>{
     }
 }
 
+const getAllUsers=async(req,res,next)=>{
+    try{
+        const users = await User.find();
+        return res.send({msg :" users fetch successfully" ,data:users});
+    }catch(error){
+        next(error);
+    }
+}
+
 
 module.exports={
     signup,
-    Login
+    Login,
+    getAllUsers
 }

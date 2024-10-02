@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import { act } from "react";
 
 export const signup = createAsyncThunk("auth/signup",async(data,{rejectWithValue})=>{
     try{
@@ -22,6 +21,18 @@ export const login = createAsyncThunk("auth/login",async(data,{rejectWithValue})
     }
 })
 
+export const getAllUsers =createAsyncThunk("auth/getallusers",async(_ ,{rejectWithValue})=>{
+    try {
+        const responce =await axios.get("http://localhost:3000/auth/getallusers");
+        const allUsers=responce.data.data.map((user,i)=>{
+            return {...user,id:i+1};
+        })
+        return allUsers;
+    } catch (error) {
+        rejectWithValue(error);
+    }
+})
+
 const getRole=()=>{
     const token=localStorage.getItem('token');
     if(token){
@@ -37,7 +48,8 @@ const initialState={
     error : null,
     isLogedin : localStorage.getItem("token")?true:false,
     role:getRole(),
-    signedIn:false
+    signedIn:false,
+    allUsers :[],
 }
 
 const authSlice=createSlice({
@@ -79,9 +91,22 @@ const authSlice=createSlice({
         .addCase(login.fulfilled,(state,action)=>{
             state.isLoading=false;
             state.user=action.payload;
+            state.role=action.payload.role;
             state.isLogedin=true
         })
         .addCase(login.rejected,(state,action)=>{
+            state.isLoading=false;
+            state.error=action.payload
+        })
+        .addCase(getAllUsers.pending,(state,action)=>{
+            state.isLoading=true;
+            state.allUsers=[];
+        })
+        .addCase(getAllUsers.fulfilled,(state,action)=>{
+            state.isLoading=false;
+            state.allUsers=action.payload;
+        })
+        .addCase(getAllUsers.rejected,(state,action)=>{
             state.isLoading=false;
             state.error=action.payload
         })
