@@ -31,6 +31,10 @@ app.use('/auth',userRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api',productRoutes);
 
+app.get("/",(req,res)=>{
+    return res.send("Hello MF");
+})
+
 
 app.use(passport.initialize());
 app.use(passport.session());
